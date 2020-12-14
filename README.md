@@ -34,7 +34,7 @@ Steps to Run Testing Eval on PRB:
 1. Download the ML Final Project Files from the Google Drive Link
 2. Go to ./provably robust boosting/eval.py and change the paths on line 19, 75, 77, 80, and 82 depending on the location of the folder on your system
 3. Run the cells in the Testing Eval on PRB notebook to get test results 
-`! python './drive/My Drive/ML Final Project Files/provably-robust-boosting/eval.py' --iter 51 --n_eval 1`
+`! python '(your path to this folder)/ML Final Project Files/provably-robust-boosting/eval.py' --iter 51 --n_eval 1`
 will give you the test errors (TE) on our adversarial attacks 
-`! python './drive/My Drive/ML Final Project Files/provably-robust-boosting/eval.py' --iter 51`
+`! python '(your path to this folder)/ML Final Project Files/provably-robust-boosting/eval.py' --iter 51`
 will give you the test errors (TE) on their adversarial attacks 
