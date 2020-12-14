@@ -28,4 +28,13 @@ Specifically, the line `sys.path.append('appropriate/path/to/code')` in the Note
 3. Lastly, note that if model or image recreation is desired when running the condensed Notebook, then the Python files in the "Code" directory also contain "PATH" variables that must be directed at a folder where model/images will be saved.
 
 ## Provably Robust Boosting
-One of the models we wanted to compare accuracies and test errors with used an ensemble of trees and adversarial training to create a robust model. The the link to their repository is here: https://github.com/max-andr/provably-robust-boosting We did make modifications to their code in order to evaluate their model on the adversarial attacks that we created, but are unable to add this code to our repo, since a lot of the code comes from their repo. This Google Drive link (https://drive.google.com/drive/folders/1NQtEvEX7Gkz78dEHqXnKrC9bxv3jT7ZV?usp=sharing) should take you to the provably robust boosting folder which is modified to work on our datasets. This folder is needed to run the Testing Eval on PRB python notebook.
+One of the models we wanted to compare accuracies and test errors with used an ensemble of trees and adversarial training to create a robust model. The the link to their repository is here: https://github.com/max-andr/provably-robust-boosting We did make modifications to their code in order to evaluate their model on the adversarial attacks that we created, but are unable to add this code to our repo, since a lot of the code comes from their repo. This Google Drive link (https://drive.google.com/drive/folders/1DpGUPeNIxg7PVTRsdc5vFUIHa2WQKAz4?usp=sharing) should take you to the ML Project Files folder which containes the provably robust boosting folder which is modified to work on our datasets and our datasets. This folder is needed to run the Testing Eval on PRB python notebook.
+
+Steps to Run Testing Eval on PRB:
+1. Download the ML Final Project Files from the Google Drive Link
+2. Go to ./provably robust boosting/eval.py and change the paths on line 19, 75, 77, 80, and 82 depending on the location of the folder on your system
+3. Run the cells in the Testing Eval on PRB notebook to get test results 
+`! python './drive/My Drive/ML Final Project Files/provably-robust-boosting/eval.py' --iter 51 --n_eval 1`
+will give you the test errors (TE) on our adversarial attacks 
+`! python './drive/My Drive/ML Final Project Files/provably-robust-boosting/eval.py' --iter 51`
+will give you the test errors (TE) on their adversarial attacks 
