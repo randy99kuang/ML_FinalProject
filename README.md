@@ -26,3 +26,6 @@ In order to actually run the code in any of the Notebooks, a few variables must 
 2. If the condensed notebook is being run, then the path to the "Code" directory must be properly specified in order to import the files in "Code".
 Specifically, the line `sys.path.append('appropriate/path/to/code')` in the Notebook must be properly set.
 3. Lastly, note that if model or image recreation is desired when running the condensed Notebook, then the Python files in the "Code" directory also contain "PATH" variables that must be directed at a folder where model/images will be saved.
+
+## Provably Robust Boosting
+One of the models we wanted to compare accuracies and test errors with used an ensemble of trees and adversarial training to create a robust model. The the link to their repository is here: https://github.com/max-andr/provably-robust-boosting We did make modifications to their code in order to evaluate their model on the adversarial attacks that we created, but are unable to add this code to our repo, since a lot of the code comes from their repo.
