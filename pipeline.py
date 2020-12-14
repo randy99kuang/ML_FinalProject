@@ -58,8 +58,9 @@ def test_pipeline(denoiser_dict, detector, model, testloader, weight_scheme, tra
     model.to(device)
     correct = 0
     total = 0
-    pred_all = [];
+    pred_all = []
     softmax_all = np.empty((0, 10), float)
+    misclassified_images = ()
     # if (trained):
     #     denoiser_dict = {0: noattack, 1: grad_edsr_transform, 2: rand_edsr_transform, 3: blur_edsr_transform}
     # else:
@@ -81,18 +82,22 @@ def test_pipeline(denoiser_dict, detector, model, testloader, weight_scheme, tra
             score = detector(inputs.float())
             score = torch.nn.functional.softmax(score, dim=1)
             if (weight_scheme == 'one_hot'):
-                inputs = denoiser_linker(score, inputs, weight_scheme, denoiser_dict)
-                inputs = inputs.to(device)
+                output_denoised = denoiser_linker(score, inputs, weight_scheme, denoiser_dict)
+                output_denoised = output_denoised.to(device)
 
-                output = model(inputs.float())
+                output = model(output_denoised.float())
+
             else:
                 output_ensemble = torch.zeros((inputs.shape[0], 10)).to(device)
+                output_denoised = ();
                 for idx in range(4):
                     denoiser_fcn = denoiser_dict[idx]
+                    output_denoised += (denoiser_fcn(inputs.float()).cpu().detach().numpy(),)
                     try:
                         denoiser_fcn = denoiser_fcn.to(device)
                     except:
                         denoiser_fcn = denoiser_fcn
+
                     output_ensemble += torch.unsqueeze(score[:, idx], -1) * model(denoiser_fcn(inputs.float()))
                 output = output_ensemble
 
@@ -103,8 +108,31 @@ def test_pipeline(denoiser_dict, detector, model, testloader, weight_scheme, tra
             pred_all.append(pred.detach().cpu().numpy())
 
             softmax_all = np.append(softmax_all, softmax_score.cpu().detach().numpy(), axis=0)
+            # print(pred.detach().cpu().numpy())
+            # print(labels.detach().cpu().numpy())
+            # print(pred.detach().cpu().numpy() == labels.detach().cpu().numpy())
+            misclassified_ex_loc = np.where((pred.detach().cpu().numpy() == labels.detach().cpu().numpy()) == False)[0][
+                0]
+            # print(misclassified_ex_loc)
             total += labels.size(0)
             correct += (pred == labels).sum().item()
+            score_detect = score[misclassified_ex_loc, :]
+            act_label = labels[misclassified_ex_loc]
+            pred_label = pred[misclassified_ex_loc]
+            # print(inputs.shape)
+            # print(output_ensemble.shape)
+            if (weight_scheme == 'one_hot'):
+                misclassified_ex = ((inputs[misclassified_ex_loc], output_denoised[misclassified_ex_loc], score_detect,
+                                     act_label, pred_label),)
+            else:
+                misclass_denoised_0 = output_denoised[0][misclassified_ex_loc]
+                misclass_denoised_1 = output_denoised[1][misclassified_ex_loc]
+                misclass_denoised_2 = output_denoised[2][misclassified_ex_loc]
+                misclass_denoised_3 = output_denoised[3][misclassified_ex_loc]
+                misclass_denoised_all = (
+                (misclass_denoised_0,), (misclass_denoised_1,), (misclass_denoised_2,), (misclass_denoised_3,))
+                misclassified_ex = (
+                (inputs[misclassified_ex_loc], misclass_denoised_all, score_detect, act_label, pred_label),)
+            misclassified_images += misclassified_ex
 
-    return pred_all, softmax_all, (correct / total)
-
+    return pred_all, softmax_all, (correct / total), misclassified_images
