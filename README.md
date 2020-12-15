@@ -9,6 +9,7 @@ https://github.com/randy99kuang/ML_FinalProject
 Link to Google Drive Folder:
 https://drive.google.com/drive/folders/1DpGUPeNIxg7PVTRsdc5vFUIHa2WQKAz4?usp=sharing
 
+**Note: The "Final_Project_Report.ipynb" contains all of our code as well as our full final report. The other files described/contained in this repository are only necessary for additional baseline comparisons as well as loading pre-trained models and attacked images.**
 ## Overview of Code Repository
 A few Colab/Jupyter Notebooks are containing in the root of the repository:
 - "all.ipynb" contains every class/model/function as well as code that calls these models/functions.
